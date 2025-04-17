@@ -39,7 +39,7 @@ class TestResults {
   }
 
   /// Add a new step to the report.
-  /// The step function is executed and 
+  /// The step function is executed and
   /// the status is updated based on the result.
   Future<void> addStep(
     String stepName,
@@ -76,20 +76,19 @@ class TestResults {
     // Initialize steps if not already present
     final _ =
         _report.putIfAbsent('steps', () => <Map<String, dynamic>>[])
-            as List<Map<String, dynamic>>
-
-    ..add({
-      'name': stepName,
-      'status': (status ?? 'failed'),
-      'start': (start ?? DateTime.now().millisecondsSinceEpoch),
-      'stop': (stop ?? DateTime.now().millisecondsSinceEpoch),
-    });
+              as List<Map<String, dynamic>>
+          ..add({
+            'name': stepName,
+            'status': (status ?? 'failed'),
+            'start': (start ?? DateTime.now().millisecondsSinceEpoch),
+            'stop': (stop ?? DateTime.now().millisecondsSinceEpoch),
+          });
 
     //Add or update Stop timestamp to the whole report
     stopTimeStamp();
   }
 
-  /// Update the last added step [stepName] in the test data 
+  /// Update the last added step [stepName] in the test data
   /// adding passed status by default.
   Future<void> updateStep(
     String stepName, {
