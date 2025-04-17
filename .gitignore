@@ -43,3 +43,4 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+assets/keys/qa-team-sandbox-8f1eccc72aa0.json
