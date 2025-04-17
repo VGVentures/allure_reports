@@ -1,0 +1,107 @@
+name: Generate Allure Report
+
+env:
+    RESULTS_DIR: "allure-results"
+    REPORT_DIR: "allure-report"
+    RESULTS_BUCKET: "integration_tests_results_qa_sandbox"
+    GCLOUD_RESULTS_DIR: "integration_tests_results_qa_sandbox"
+    HISTORICAL_REPORTS_DIR: "historical-reports"
+
+on:
+  workflow_dispatch: # Allows manual triggering
+  repository_dispatch: # Allows external triggers (like Codemagic)
+    types: [codemagic-trigger]
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: allure-report #Ensure we are on the allure-report branch where reports will be stores
+
+      - name: Create a directory to store historical reports if it doesn't exist
+        run: mkdir -p "$HISTORICAL_REPORTS_DIR"
+
+      - name: Clean up the previous test results
+        run: |
+            rm -rf allure-results
+            mkdir -p allure-results
+            
+            rm -rf "$REPORT_DIR"
+            mkdir -p "$REPORT_DIR"
+            
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2 
+        with:   
+            credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+      
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+            project_id: qa-team-sandbox
+            
+      - name: Download the latest test results of the bucket
+        run: |
+            gcloud storage cp --recursive "gs://$RESULTS_BUCKET/$GCLOUD_RESULTS_DIR/" "$RESULTS_DIR"
+            # gcloud storage rm --recursive gs://$RESULTS_BUCKET/$GCLOUD_RESULTS_DIR/ # Codemagic should be responsible for cleaning up the bucket before running the tests
+
+      - name: Install Allure and generate Allure report
+        run: |
+            # Install homebrew
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            echo >> /home/runner/.bashrc
+            echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/runner/.bashrc
+            eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+            
+            # Install Allure
+            brew install allure
+            echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"' >> $GITHUB_ENV
+
+            # Generate Allure report
+            allure generate --single-file "$RESULTS_DIR/integration_tests_results_qa_sandbox/" --clean -o "$REPORT_DIR"
+      
+            
+      - name: Archive the generated report with a timestamp
+        run: |
+            echo "TIMESTAMP=$(date +"%b_%d_%Y_%H_%M")" >> $GITHUB_ENV
+            cp -r "$REPORT_DIR" "$HISTORICAL_REPORTS_DIR/report_$TIMESTAMP"
+
+      - name: Set up Dart
+        uses: dart-lang/setup-dart@v1
+      
+      - name: Install dependencies
+        run: dart pub get
+    
+      - name: Generate Index file with all the historical reports
+        run: |
+            dart run generate_index.dart
+          
+      - name: Check if index.html exists
+        run: |
+            if [ ! -f index.html ]; then
+                echo "❌ index.html Report not found! Failing workflow."
+                exit 1
+            fi
+
+      - name: Upload Allure Report as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+            name: allure-report
+            path: index.html  # Adjust based on where your script saves reports
+
+
+      - name: Commit and Push Report to allure-report branch
+        run: |
+            # Configure Git
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git checkout allure-report  # Ensure you're on the main branch
+            
+            # Push changes to the allure-report branch
+            git add .
+            git commit -m "Update Allure report [CI] $TIMESTAMP"
+            git push origin allure-report
