@@ -23,6 +23,15 @@ Before you can run the tests and generate the Allure report, make sure you have 
 - [Allure Commandline](https://docs.qameta.io/allure/#_installing_a_commandline)  
   *(used to generate the HTML report from raw results)*
 
+## Notes on Writing Tests for Allure Reports
+
+In order to produce a structured Allure report, you need to integrate the `TestResults` class into your tests.  
+You should wrap each important test action or validation inside the `report.addStep()` method to log the steps clearly.
+
+You can check the implementation example in `integration_test/app_test.dart` to understand how to properly use `TestResults` and `report.addStep()` within your test scenarios.
+
+This will ensure each test step is reported and visualized in the final Allure report.
+
 ## How to Run Tests and Generate the Allure Report
 
 Running tests and generating an Allure report is straightforward:
@@ -41,8 +50,8 @@ The `run_tests_locally_allure.sh` script automates the full cycle of testing and
 
 1. **Cleans up** any old test results in `allure-results/`.
 2. **Deletes previous results** from the configured Google Cloud Storage bucket.
-3. **Runs your Flutter integration test** — the default entry point is `integration_test/app_test.dart`.
-4. **Downloads the latest test result** from Google Cloud Storage.
+3. **Runs your Flutter integration tests** — the default entry point is `integration_test/app_test.dart`.
+4. **Downloads the latest test results** from Google Cloud Storage.
 5. **Generates an Allure report** in the `allure-report/` folder.
 6. **Opens the report** automatically in your default web browser.
 
