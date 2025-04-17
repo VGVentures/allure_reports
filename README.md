@@ -60,8 +60,3 @@ The `run_tests_locally_allure.sh` script automates the full cycle of testing and
 - Make sure you have access permissions to the Google Cloud Storage bucket defined in the script.
 - The script assumes that the Allure CLI is installed and available in your system's PATH.
 - If errors occur during execution, the script will log them, but it won’t necessarily stop unless configured to do so.
-
-## License
-
-This project is licensed under the MIT License.  
-See the [LICENSE](LICENSE) file for more details.
