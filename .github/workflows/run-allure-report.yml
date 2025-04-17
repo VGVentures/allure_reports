@@ -73,8 +73,8 @@ jobs:
       - name: Set up Dart
         uses: dart-lang/setup-dart@v1
       
-      - name: Install dependencies
-        run: dart pub get
+    #   - name: Install dependencies
+    #     run: dart pub get
     
       - name: Generate Index file with all the historical reports
         run: |
