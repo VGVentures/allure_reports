@@ -67,8 +67,8 @@ jobs:
             
       - name: Archive the generated report with a timestamp
         run: |
-            echo 'TIMESTAMP=$(date +"%b_%d_%Y_%H_%M")' >> $GITHUB_ENV
-            cp -r "$REPORT_DIR" "$HISTORICAL_REPORTS_DIR/report_$TIMESTAMP"
+            echo "TIMESTAMP=$(date +"%b_%d_%Y_%H_%M")" >> $GITHUB_ENV
+            cp -r $REPORT_DIR/ $HISTORICAL_REPORTS_DIR/report_$TIMESTAMP
 
       # - name: Set up Flutter
       #   uses: subosito/flutter-action@v2
