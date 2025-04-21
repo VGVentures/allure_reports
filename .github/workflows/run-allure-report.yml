@@ -70,16 +70,22 @@ jobs:
             echo "TIMESTAMP=$(date +"%b_%d_%Y_%H_%M")" >> $GITHUB_ENV
             cp -r "$REPORT_DIR" "$HISTORICAL_REPORTS_DIR/report_$TIMESTAMP"
 
-      - name: Set up Dart
-        uses: dart-lang/setup-dart@v1
+    #   - name: Set up Dart
+    #     uses: dart-lang/setup-dart@v1
       
-    #   - name: Install dependencies
-    #     run: dart pub get
+    # #   - name: Install dependencies
+    # #     run: dart pub get
     
+    #   - name: Generate Index file with all the historical reports
+    #     run: |
+    #         dart run generate_index.dart
+
+            
       - name: Generate Index file with all the historical reports
         run: |
-            dart run generate_index.dart
-          
+            node generate_index.js
+    
+
       - name: Check if index.html exists
         run: |
             if [ ! -f index.html ]; then
