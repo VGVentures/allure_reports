@@ -32,6 +32,8 @@ jobs:
             
             rm -rf "$REPORT_DIR"
             mkdir -p "$REPORT_DIR"
+
+            rm -f index.html
             
 
       - name: Authenticate with Google Cloud
@@ -65,10 +67,16 @@ jobs:
             allure generate --single-file "$RESULTS_DIR/integration_tests_results_qa_sandbox/" --clean -o "$REPORT_DIR"
       
             
+      - name: Set up timestamp environment variables
+        run: |
+          echo "TIMESTAMP=$(date +"%b_%d_%Y_%H_%M")" >> $GITHUB_ENV
+          echo "reportNAME="report_$(date +"%b_%d_%Y_%H_%M")"" >> $GITHUB_ENV
+          echo "$reportNAME"
+
       - name: Archive the generated report with a timestamp
         run: |
-            echo "TIMESTAMP=$(date +"%b_%d_%Y_%H_%M")" >> $GITHUB_ENV
-            cp -r "$REPORT_DIR" "$HISTORICAL_REPORTS_DIR/report_$TIMESTAMP"
+            mkdir -p "$HISTORICAL_REPORTS_DIR/$reportNAME"
+            cp -r "$REPORT_DIR/index.html" $HISTORICAL_REPORTS_DIR/$reportNAME
 
     #   - name: Set up Dart
     #     uses: dart-lang/setup-dart@v1
