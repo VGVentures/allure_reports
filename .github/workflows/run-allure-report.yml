@@ -71,7 +71,7 @@ jobs:
         run: |
             echo "TIMESTAMP=$(date +"%b_%d_%Y_%H_%M")" >> $GITHUB_ENV
             echo "reportNAME="report_$(date +"%b_%d_%Y_%H_%M")"" >> $GITHUB_ENV
-            cp "$REPORT_DIR/index.html" "$HISTORICAL_REPORTS_DIR/$reportNAME"
+            cp "$REPORT_DIR/index.html" $HISTORICAL_REPORTS_DIR/$reportNAME
 
 
 
