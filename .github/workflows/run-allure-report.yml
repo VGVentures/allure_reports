@@ -32,6 +32,8 @@ jobs:
             
             rm -rf "$REPORT_DIR"
             mkdir -p "$REPORT_DIR"
+
+            rm -f index.html
             
 
       - name: Authenticate with Google Cloud
@@ -68,6 +70,7 @@ jobs:
       - name: Archive the generated report with a timestamp
         run: |
             echo "TIMESTAMP=$(date +"%b_%d_%Y_%H_%M")" >> $GITHUB_ENV
+            
             cp -r "$REPORT_DIR"/index.html "$HISTORICAL_REPORTS_DIR"/report_"$TIMESTAMP"
 
       # - name: Set up Flutter
