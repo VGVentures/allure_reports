@@ -69,13 +69,11 @@ jobs:
             
       - name: Archive the generated report with a timestamp
         run: |
-            echo "TIMESTAMP=$(date +"%b_%d_%Y_%H_%M")" >> $GITHUB_ENV
-            echo "reportNAME="report_$(date +"%b_%d_%Y_%H_%M")"" >> $GITHUB_ENV
-            echo "$reportNAME"
-            mkdir -p "$HISTORICAL_REPORTS_DIR/$reportNAME"
-            cp "$REPORT_DIR/index.html" $HISTORICAL_REPORTS_DIR/$reportNAME
-
-
+          echo "TIMESTAMP=$(date +"%b_%d_%Y_%H_%M")" >> $GITHUB_ENV
+          echo "reportNAME="report_$(date +"%b_%d_%Y_%H_%M")"" >> $GITHUB_ENV
+          echo "$reportNAME"
+          mkdir -p "$HISTORICAL_REPORTS_DIR/$reportNAME"
+          cp -r "$REPORT_DIR/index.html" $HISTORICAL_REPORTS_DIR/$reportNAME
 
       # - name: Set up Flutter
       #   uses: subosito/flutter-action@v2
@@ -92,6 +90,9 @@ jobs:
 
       - name: Generate Index file with all the historical reports
         run: |
+            echo "$reportNAME"
+            mkdir -p "$HISTORICAL_REPORTS_DIR/$reportNAME"
+            cp -r "$REPORT_DIR/index.html" $HISTORICAL_REPORTS_DIR/$reportNAME
             node generate_index.js
 
       - name: Check if index.html exists
