@@ -75,13 +75,18 @@ jobs:
         with:
             flutter-version: '3.29.2'  
       
-      - name: Install dependencies
-        run: flutter pub get
+      # - name: Install dependencies
+      #   run: flutter pub get
     
+      # - name: Generate Index file with all the historical reports
+      #   run: |
+      #       dart run generate_index.dart
+          
+
       - name: Generate Index file with all the historical reports
         run: |
-            dart run generate_index.dart
-          
+            node generate_index.js
+
       - name: Check if index.html exists
         run: |
             if [ ! -f index.html ]; then
