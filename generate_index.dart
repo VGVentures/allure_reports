@@ -20,20 +20,24 @@ Future<List<Map<String, String>>> getReportList(Directory dir) async {
   if (!await dir.exists()) return reports;
 
   final entries = await dir.list().toList();
-  for (var entity in entries) {
+  for (final entity in entries) {
     if (entity is Directory) {
       final indexFile = File('${entity.path}/index.html');
       if (await indexFile.exists()) {
         reports.add({
           'name': entity.uri.pathSegments[entity.uri.pathSegments.length - 2],
-          'url': 'historical-reports/${entity.uri.pathSegments.last}/index.html',
+          'url':
+              'historical-reports/${entity.uri.pathSegments.last}/index.html',
         });
       }
     }
   }
 
   // Sort reports (latest first)
-  reports.sort((a, b) => parseReportDate(b['name']!).compareTo(parseReportDate(a['name']!)));
+  reports.sort(
+    (a, b) =>
+        parseReportDate(b['name']!).compareTo(parseReportDate(a['name']!)),
+  );
 
   return reports;
 }
@@ -55,7 +59,7 @@ int parseReportDate(String reportName) {
     'Sep': 9,
     'Oct': 10,
     'Nov': 11,
-    'Dec': 12
+    'Dec': 12,
   };
 
   final month = months[match.group(1)!] ?? 1;
@@ -68,16 +72,18 @@ int parseReportDate(String reportName) {
 }
 
 String generateHTML(List<Map<String, String>> reports) {
-  final rows = reports.map((report) {
-    final isLatest = report['name'] == reports.first['name'];
-    return '''
+  final rows = reports
+      .map((report) {
+        final isLatest = report['name'] == reports.first['name'];
+        return '''
 <tr>
   <td><a href="${report['url']}" class="${isLatest ? 'latest' : ''}">
     ${report['name']}${isLatest ? ' ⬅️ Latest' : ''}
   </a></td>
 </tr>
 ''';
-  }).join('');
+      })
+      .join();
 
   return '''
 <!DOCTYPE html>
