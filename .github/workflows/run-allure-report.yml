@@ -48,8 +48,7 @@ jobs:
             
       - name: Download the latest test results of the bucket
         run: |
-            gcloud storage cp --recursive "gs://$RESULTS_BUCKET/$GCLOUD_RESULTS_DIR/" "$RESULTS_DIR"
-            # gcloud storage rm --recursive gs://$RESULTS_BUCKET/$GCLOUD_RESULTS_DIR/ # Codemagic should be responsible for cleaning up the bucket before running the tests
+            gcloud storage cp --recursive "gs://$RESULTS_BUCKET/$GCLOUD_RESULTS_DIR/" "$RESULTS_DIR" # Codemagic should be responsible for cleaning up the bucket before running the tests
 
       - name: Install Allure and generate Allure report
         run: |
@@ -78,22 +77,20 @@ jobs:
             mkdir -p "$HISTORICAL_REPORTS_DIR/$reportNAME"
             cp -r "$REPORT_DIR/index.html" $HISTORICAL_REPORTS_DIR/$reportNAME
 
-      # - name: Set up Flutter
-      #   uses: subosito/flutter-action@v2
-      #   with:
-      #       flutter-version: '3.29.2'  
-      
-      # - name: Install dependencies
-      #   run: flutter pub get
-    
-      # - name: Generate Index file with all the historical reports
-      #   run: |
-      #       dart run generate_index.dart
-          
+      # - name: Set up Dart
+      #   uses: dart-lang/setup-dart@v1
 
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+            flutter-version: '3.29.2' 
+
+      - name: Install dependencies
+        run: flutter pub get
+            
       - name: Generate Index file with all the historical reports
         run: |
-            node generate_index.js
+            dart run generate_index.dart
 
       - name: Check if index.html exists
         run: |
@@ -106,7 +103,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
             name: allure-report
-            path: index.html  # Adjust based on where your script saves reports
+            path: index.html
 
 
       - name: Commit and Push Report to allure-report branch
@@ -114,7 +111,7 @@ jobs:
             # Configure Git
             git config --global user.name "github-actions[bot]"
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            git checkout allure-report  # Ensure you're on the main branch
+            git checkout allure-report 
             
             # Push changes to the allure-report branch
             git add .
