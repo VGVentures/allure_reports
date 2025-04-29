@@ -34,7 +34,6 @@ jobs:
             mkdir -p "$REPORT_DIR"
 
             rm -f index.html
-            
 
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v2 
