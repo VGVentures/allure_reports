@@ -34,7 +34,6 @@ jobs:
             mkdir -p "$REPORT_DIR"
 
             rm -f index.html
-            
 
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v2 
@@ -76,9 +75,6 @@ jobs:
         run: |
             mkdir -p "$HISTORICAL_REPORTS_DIR/$reportNAME"
             cp -r "$REPORT_DIR/index.html" $HISTORICAL_REPORTS_DIR/$reportNAME
-
-      # - name: Set up Dart
-      #   uses: dart-lang/setup-dart@v1
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
