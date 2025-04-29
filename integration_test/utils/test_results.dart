@@ -44,7 +44,7 @@ class TestResults {
   Future<void> addStep(
     String stepName,
     void Function() stepFunction, {
-    dynamic status,
+    String? status,
     int? start,
     int? stop,
   }) async {
@@ -69,7 +69,7 @@ class TestResults {
   ///Also start and stop timestamps are set to the current time by default.
   Future<void> registerStep(
     String stepName, {
-    dynamic status,
+    String? status,
     int? start,
     int? stop,
   }) async {
@@ -92,7 +92,7 @@ class TestResults {
   /// adding passed status by default.
   Future<void> updateStep(
     String stepName, {
-    dynamic status,
+    String? status,
     int? start,
     int? stop,
   }) async {
