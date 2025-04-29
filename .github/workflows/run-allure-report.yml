@@ -87,22 +87,10 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
-
-      # - name: Set up Dart
-      #   uses: dart-lang/setup-dart@v1
-
-      # - name: Get Dart dependencies
-      #   run: dart pub get
             
       - name: Generate Index file with all the historical reports
         run: |
             dart run generate_index.dart
-
-            
-      # - name: Generate Index file with all the historical reports
-      #   run: |
-      #       node generate_index.js
-    
 
       - name: Check if index.html exists
         run: |
