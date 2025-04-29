@@ -84,7 +84,10 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
             flutter-version: '3.29.2' 
-      
+
+      - name: Install dependencies
+        run: flutter pub get
+            
       - name: Generate Index file with all the historical reports
         run: |
             dart run generate_index.dart
