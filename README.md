@@ -1,69 +1,103 @@
 # Flutter Integration Tests with Allure Reports
 
-This project showcases how to integrate **Allure Reports** into Flutter integration tests, making it easy to generate clear, structured, and visually rich test reports.
+This project showcases how to integrate **Allure Reports** into Flutter integration tests — making it simple to generate structured, visually rich test reports that help developers and QA teams understand test outcomes at a glance.
 
-## Project Overview
+---
 
-The project uses a combination of Flutter, Google Cloud Storage, and Allure to automate both the execution of integration tests and the creation of reports that help developers and QA teams better understand test outcomes.
+## 📁 Project Structure
 
-## Project Structure
+- `integration_test/` — Flutter integration test files.
+- `scripts/` — Shell script for running tests and generating report.
+- `allure-results/` — Raw Allure test result files.
+- `allure-report/` — Generated Allure HTML reports.
 
-- `integration_test/` — Contains the Flutter integration test files.
-- `scripts/` — Contains helper scripts for running tests and generating reports.
-- `allure-results/` — Stores raw test result files.
-- `allure-report/` — Stores the generated Allure report.
+---
 
-## Prerequisites
+## 🚀 Getting Started
 
-Before you can run the tests and generate the Allure report, make sure you have the following installed:
+### Prerequisites
+
+Make sure you have the following installed:
 
 - [Flutter SDK](https://flutter.dev/docs/get-started/install)
-- [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)  
-  *(for uploading and downloading test results from GCS)*
-- [Allure Commandline](https://docs.qameta.io/allure/#_installing_a_commandline)  
-  *(used to generate the HTML report from raw results)*
+- [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) — For uploading/downloading test results from GCS.
+- [Allure Commandline](https://docs.qameta.io/allure/#_installing_a_commandline) — For generating HTML reports.
 
-## Notes on Writing Tests for Allure Reports
+---
 
-In order to produce a structured Allure report, you need to integrate the `TestResults` class into your tests.  
-You should wrap each important test action or validation inside the `report.addStep()` method to log the steps clearly.
+## 🧪 Writing Tests for Allure
 
-You can check the implementation example in `integration_test/app_test.dart` to understand how to properly use `TestResults` and `report.addStep()` within your test scenarios.
+To take full advantage of Allure's structured reporting:
 
-This will ensure each test step is reported and visualized in the final Allure report.
+- Use the `TestResults` class in your integration tests.
+- Wrap each meaningful step in `report.addStep()` to ensure it's logged and visible in the final report.
 
-## How to Run Tests and Generate the Allure Report
+➡️ Example usage: see `integration_test/app_test.dart`.
 
-Running tests and generating an Allure report is straightforward:
+---
+
+## ⚙️ Running Tests & Generating Report Locally
+
+Use the provided script to run integration tests and generate an Allure report locally:
 
 ```bash
-# Navigate to the scripts folder
 cd scripts
-
-# Run the run_tests_locally_allure.sh script
 ./run_tests_locally_allure.sh
 ```
 
-## What This Script Does
+---
 
-The `run_tests_locally_allure.sh` script automates the full cycle of testing and reporting:
+## 🔄 What the Script Does
 
-1. **Cleans up** any old test results in `allure-results/`.
-2. **Deletes previous results** from the configured Google Cloud Storage bucket.
-3. **Runs your Flutter integration tests** — the default entry point is `integration_test/app_test.dart`.
-4. **Downloads the latest test results** from Google Cloud Storage.
-5. **Generates an Allure report** in the `allure-report/` folder.
-6. **Opens the report** automatically in your default web browser.
+The `run_tests_locally_allure.sh` script automates the entire flow:
 
-## Notes
+1. Cleans up local `allure-results/`.
+2. Deletes previous results from your GCS bucket.
+3. Runs Flutter integration tests (`integration_test/app_test.dart` by default).
+4. Downloads the latest test results from GCS.
+5. Generates the Allure HTML report.
+6. Opens the report automatically in your browser.
 
-- Make sure you have access permissions to the Google Cloud Storage bucket defined in the script.
-- The script assumes that the Allure CLI is installed and available in your system's PATH.
-- If errors occur during execution, the script will log them, but it won’t necessarily stop unless configured to do so.
-- **This implementation is built to work with Google Cloud Storage.**  
-  To use it:
-  - You’ll need a Google Cloud Storage account.
-  - Save your service account key file in the `assets/keys/` directory.
-  - Update the `GoogleCloudPaths` class with the correct bucket and path information.
-- **Not using Google Cloud Storage?**  
-  No problem — you can replace the storage logic with any other service of your choice, or implement a local solution for storing and retrieving test results.
+---
+
+## 📌 Notes
+
+- Ensure access to the Google Cloud Storage bucket defined in the script.
+- The Allure CLI must be in your system’s PATH.
+- To use GCS:
+  - Save your service account key in `assets/keys/`.
+  - Configure the `GoogleCloudPaths` class with your bucket details.
+- You can replace GCS with any other storage service or a local solution.
+
+---
+
+## 🌍 Hosting & Managing Historical Reports on the Web
+
+We’ve set up a system to automatically **generate and host Allure reports** using **GitHub Pages**. This makes the latest and historical test results easily accessible — without any manual work.
+
+A GitHub Actions workflow handles the entire process:
+
+- Runs tests and generates the Allure HTML report (`--single-file`).
+- Archives past reports in a `/historical-reports/` folder.
+- Automatically creates or updates a `index.html` with links to all past reports.
+- Pushes everything to the `allure-report` branch.
+- GitHub Pages serves this branch, making the reports publicly accessible.
+
+📎 You can browse or reuse the full setup in our [GitHub workflow](https://github.com/VGVentures/allure_reports/blob/main/.github/workflows/run-allure-report.yml).  
+🛠️ Feel free to adapt it to your project and infrastructure!
+
+---
+
+## 🗂️ Example Structure for Historical Reports
+
+```
+/project-root
+|── /allure-report    👈 Latest Allure report
+|── /allure-results   👈 Latest JSON results files
+|── /historical-reports
+│     |── report_2025_01_01/index.html
+│     |── report_2025_01_02/index.html
+│     |── ...
+|── index.html         👈 Generated historical report
+|── generate_index.dart  👈 Dart script for building the index
+```
