@@ -90,7 +90,7 @@ A GitHub Actions workflow handles the entire process:
 
 ---
 
-## 🗂️ Example Structure for Historical Reports
+## 🗂️ Example Structure for Historical Reports (on allure-report branch)
 
 ```
 /project-root
