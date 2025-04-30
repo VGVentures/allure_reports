@@ -75,6 +75,8 @@ The `run_tests_locally_allure.sh` script automates the entire flow:
 
 We’ve set up a system to automatically **generate and host Allure reports** using **GitHub Pages**. This makes the latest and historical test results easily accessible — without any manual work.
 
+- [Historical reports - GitHub Pages](https://ideal-carnival-kr6ykzj.pages.github.io/)
+
 A GitHub Actions workflow handles the entire process:
 
 - Runs tests and generates the Allure HTML report (`--single-file`).
