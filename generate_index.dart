@@ -84,7 +84,7 @@ void main() async {
   buffer
     ..writeln('</ul>')
     ..writeln(
-      '<div class="footer">Generated on ${DateTime.now().toLocal()}</div>',
+      '<div class="footer">Generated on ${DateTime.now().toUtc()} UTC Time</div>',
     )
     ..writeln('</div>')
     ..writeln('</body>')
