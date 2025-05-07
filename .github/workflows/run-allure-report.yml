@@ -67,7 +67,7 @@ jobs:
             
       - name: Set up timestamp environment variables
         run: |
-          echo "TIMESTAMP=$(date +"%b_%d_%Y_%H_%M")" >> $GITHUB_ENV
+          echo "TIMESTAMP=$(date -u +"%b_%d_%Y_%H_%M")" >> $GITHUB_ENV
           echo "reportNAME="report_$(date +"%b_%d_%Y_%H_%M")"" >> $GITHUB_ENV
           echo "$reportNAME"
 
