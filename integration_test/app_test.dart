@@ -37,7 +37,7 @@ void main() {
       expect(find.text('1'), findsOneWidget);
     });
 
-    report.stopAndPass();
+    report.passTest();
   });
 
   tearDown(() async {

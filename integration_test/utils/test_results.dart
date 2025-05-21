@@ -33,9 +33,8 @@ class TestResults {
   }
 
   ///Sets the status of the test as passed.
-  void stopAndPass() {
+  void passTest() {
     _report['status'] = 'passed';
-    stopTimeStamp();
   }
 
   /// Add a new step to the report.
@@ -85,7 +84,7 @@ class TestResults {
           });
 
     //Add or update Stop timestamp to the whole report
-    stopTimeStamp();
+    stopTimeStamp(stop: stop);
   }
 
   /// Update the last added step [stepName] in the test data
@@ -105,7 +104,7 @@ class TestResults {
         break;
       }
     }
-    stopTimeStamp();
+    stopTimeStamp(stop: stop);
   }
 
   /// Upload the report to Google Cloud Storage
