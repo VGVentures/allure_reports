@@ -6,16 +6,11 @@ import 'google_cloud_service.dart';
 
 class TestResults {
   TestResults(String testName) {
-    initialize(testName);
-  }
-  final Map<String, dynamic> _report = {};
-
-  ///Initializes the report with the test name and status as failed.
-  void initialize(String testName) {
     _report['name'] = testName;
     _report['status'] = 'failed';
     startTimeStamp();
   }
+  final Map<String, dynamic> _report = {};
 
   ///Returns the report content.
   Map<String, dynamic> getTestData() {
@@ -23,23 +18,17 @@ class TestResults {
   }
 
   ///Sets the start timestamp of the test, as default it uses the current time.
-  void startTimeStamp({int? start}) {
-    _report['start'] = start ?? DateTime.now().millisecondsSinceEpoch;
-  }
+  void startTimeStamp({int? start}) =>
+      _report['start'] = start ?? DateTime.now().millisecondsSinceEpoch;
 
   ///Sets the stop timestamp as the current time.
-  void stopTimeStamp({int? stop}) {
-    _report['stop'] = stop ?? DateTime.now().millisecondsSinceEpoch;
-  }
+  void stopTimeStamp({int? stop}) =>
+      _report['stop'] = stop ?? DateTime.now().millisecondsSinceEpoch;
 
   ///Sets the status of the test as passed.
-  void passTest() {
-    _report['status'] = 'passed';
-  }
+  void passTest() => _report['status'] = 'passed';
 
-  /// Add a new step to the report.
-  /// The step function is executed and
-  /// the status is updated based on the result.
+  /// Adds a report step and updates its status based on execution.
   Future<void> addStep(
     String stepName,
     void Function() stepFunction, {
@@ -56,16 +45,14 @@ class TestResults {
 
       // If successful, update the step status to 'passed'
       await updateStep(stepName, status: 'passed', stop: stop);
-    } catch (e) {
+    } on Exception {
       // If an error occurs, update the step status to 'failed'
       await updateStep(stepName, status: 'failed', stop: stop);
       rethrow; // Ensure the test fails as expected
     }
   }
 
-  /// Add a new step to the report with the failed status by default.
-  ///
-  ///Also start and stop timestamps are set to the current time by default.
+  /// Registers a failed step with current timestamps by default.
   Future<void> registerStep(
     String stepName, {
     String? status,
@@ -87,8 +74,7 @@ class TestResults {
     stopTimeStamp(stop: stop);
   }
 
-  /// Update the last added step [stepName] in the test data
-  /// adding passed status by default.
+  /// Updates the given step with 'passed' status and current timestamps.
   Future<void> updateStep(
     String stepName, {
     String? status,
@@ -107,10 +93,10 @@ class TestResults {
     stopTimeStamp(stop: stop);
   }
 
-  /// Upload the report to Google Cloud Storage
-  Future<void> uploadReportToGoogleCloudStorage(String testUDID) async {
+  /// Uploads the report to Google Cloud Storage
+  Future<void> uploadReportToGoogleCloudStorage(String testUUID) async {
     final destinationPath =
-        '${GoogleCloudPaths().destinationPath}/$testUDID-result.json';
+        '${GoogleCloudPaths().destinationPath}/$testUUID-result.json';
     await uploadStringToCloudStorage(
       content: jsonEncode(_report),
       bucketName: GoogleCloudPaths().bucketName,

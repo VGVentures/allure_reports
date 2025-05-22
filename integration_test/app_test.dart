@@ -9,7 +9,7 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   const testName = 'Tap on the floating action button, verify counter';
   final report = TestResults(testName);
-  final testUDID = report.generateAllureReportId();
+  final testUUID = report.generateAllureReportId();
 
   testWidgets(testName, (tester) async {
     await report.addStep('Load app widget', () async {
@@ -41,6 +41,6 @@ void main() {
   });
 
   tearDown(() async {
-    await report.uploadReportToGoogleCloudStorage(testUDID);
+    await report.uploadReportToGoogleCloudStorage(testUUID);
   });
 }
