@@ -1,6 +1,6 @@
 # Flutter Integration Tests with Allure Reports
 
-This project showcases how to integrate **Allure Reports** into Flutter integration tests — making it simple to generate structured, visually rich test reports that help developers and QA teams understand test outcomes at a glance.
+This project showcases how to integrate **Allure Reports** into Flutter integration tests — making it simple to generate structured, visually rich test reports that help developers, QA and stakeholders understand test outcomes at a glance.
 
 ---
 
@@ -26,6 +26,9 @@ Make sure you have the following installed:
 ---
 
 ## 🧪 Writing Tests for Allure
+
+> **Tip:** You can use this approach with both Flutter's built-in integration_test package and the [Patrol](https://patrol.leancode.co/) framework.
+
 
 To take full advantage of Allure's structured reporting:
 
@@ -79,7 +82,7 @@ We’ve set up a system to automatically **generate and host Allure reports** us
 
 A GitHub Actions workflow handles the entire process:
 
-- Runs tests and generates the Allure HTML report (`--single-file`).
+- Retrieves tests results and generates the Allure HTML report (`--single-file`).
 - Archives past reports in a `/historical-reports/` folder.
 - Automatically creates or updates a `index.html` with links to all past reports.
 - Pushes everything to the `allure-report` branch.
