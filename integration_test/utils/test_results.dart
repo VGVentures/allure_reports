@@ -28,7 +28,12 @@ class TestResults {
   ///Sets the status of the test as passed.
   void passTest() => _report['status'] = 'passed';
 
-  /// Adds a report step and updates its status based on execution.
+  /// Adds a report step and updates its status.
+  ///
+  /// Registers a step with the given name and executes the provided
+  /// function. If the function completes successfully, the step status is set
+  /// to 'passed'. If an exception occurs, the step status is set to 'failed'.
+  /// The step's start and stop timestamps are recorded automatically.
   Future<void> addStep(
     String stepName,
     void Function() stepFunction, {
@@ -37,7 +42,7 @@ class TestResults {
     int? stop,
   }) async {
     try {
-      // Add the step with default 'in progress' status
+      // Add the step with 'in progress' status
       await registerStep(stepName, status: 'in progress', start: start);
 
       // Execute the step function
@@ -52,7 +57,10 @@ class TestResults {
     }
   }
 
-  /// Registers a failed step with current timestamps by default.
+  /// Registers a new step
+  /// 
+  /// Registers the step with 'failed' status as default, and records its start
+  /// and stop timestamps.
   Future<void> registerStep(
     String stepName, {
     String? status,
@@ -74,7 +82,10 @@ class TestResults {
     stopTimeStamp(stop: stop);
   }
 
-  /// Updates the given step with 'passed' status and current timestamps.
+  /// Updates the given step.
+  /// 
+  /// Updates the latest step with the given name, with the status 'passed' as 
+  /// default and records its start.
   Future<void> updateStep(
     String stepName, {
     String? status,
@@ -93,7 +104,7 @@ class TestResults {
     stopTimeStamp(stop: stop);
   }
 
-  /// Uploads the report to Google Cloud Storage
+  /// Uploads the report to Google Cloud Storage.
   Future<void> uploadReportToGoogleCloudStorage(String testUUID) async {
     final destinationPath =
         '${GoogleCloudPaths().destinationPath}/$testUUID-result.json';
@@ -104,9 +115,9 @@ class TestResults {
     );
   }
 
-  ///Generates an unique ID for the Allure report
+  ///Generates an unique ID for the Allure report.
   String generateAllureReportId() {
     const uuid = Uuid();
-    return uuid.v4(); // Generates a unique ID
+    return uuid.v4();
   }
 }
