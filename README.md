@@ -34,8 +34,8 @@ To take full advantage of Allure's structured reporting:
 
 - Use the `TestResults` class in your integration tests.
 - Wrap each meaningful step in `report.addStep()` to ensure it's logged and visible in the final report.
-- At the end of your test, if no exceptions were thrown, call report.passTest() to mark the test as passed in the final report.
-- In the tearDown() block, export the test results to your storage solution
+- At the end of your test, if no exceptions were thrown, call `report.passTest()` to mark the test as passed in the final report.
+- In the `tearDown()` block, export the test results to your storage solution.
 
 ➡️ Example usage: see `integration_test/app_test.dart`.
 
