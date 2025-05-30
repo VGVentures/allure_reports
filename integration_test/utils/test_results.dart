@@ -6,16 +6,11 @@ import 'google_cloud_service.dart';
 
 class TestResults {
   TestResults(String testName) {
-    initialize(testName);
-  }
-  final Map<String, dynamic> _report = {};
-
-  ///Initializes the report with the test name and status as failed.
-  void initialize(String testName) {
     _report['name'] = testName;
     _report['status'] = 'failed';
     startTimeStamp();
   }
+  final Map<String, dynamic> _report = {};
 
   ///Returns the report content.
   Map<String, dynamic> getTestData() {
@@ -23,23 +18,22 @@ class TestResults {
   }
 
   ///Sets the start timestamp of the test, as default it uses the current time.
-  void startTimeStamp({int? start}) {
-    _report['start'] = start ?? DateTime.now().millisecondsSinceEpoch;
-  }
+  void startTimeStamp({int? start}) =>
+      _report['start'] = start ?? DateTime.now().millisecondsSinceEpoch;
 
   ///Sets the stop timestamp as the current time.
-  void stopTimeStamp({int? stop}) {
-    _report['stop'] = stop ?? DateTime.now().millisecondsSinceEpoch;
-  }
+  void stopTimeStamp({int? stop}) =>
+      _report['stop'] = stop ?? DateTime.now().millisecondsSinceEpoch;
 
   ///Sets the status of the test as passed.
-  void passTest() {
-    _report['status'] = 'passed';
-  }
+  void passTest() => _report['status'] = 'passed';
 
-  /// Add a new step to the report.
-  /// The step function is executed and
-  /// the status is updated based on the result.
+  /// Adds a report step and updates its status.
+  ///
+  /// Registers a step with the given name and executes the provided
+  /// function. If the function completes successfully, the step status is set
+  /// to 'passed'. If an exception occurs, the step status is set to 'failed'.
+  /// The step's start and stop timestamps are recorded automatically.
   Future<void> addStep(
     String stepName,
     void Function() stepFunction, {
@@ -48,7 +42,7 @@ class TestResults {
     int? stop,
   }) async {
     try {
-      // Add the step with default 'in progress' status
+      // Add the step with 'in progress' status
       await registerStep(stepName, status: 'in progress', start: start);
 
       // Execute the step function
@@ -56,16 +50,17 @@ class TestResults {
 
       // If successful, update the step status to 'passed'
       await updateStep(stepName, status: 'passed', stop: stop);
-    } catch (e) {
+    } on Exception {
       // If an error occurs, update the step status to 'failed'
       await updateStep(stepName, status: 'failed', stop: stop);
       rethrow; // Ensure the test fails as expected
     }
   }
 
-  /// Add a new step to the report with the failed status by default.
-  ///
-  ///Also start and stop timestamps are set to the current time by default.
+  /// Registers a new step
+  /// 
+  /// Registers the step with 'failed' status as default, and records its start
+  /// and stop timestamps.
   Future<void> registerStep(
     String stepName, {
     String? status,
@@ -87,8 +82,10 @@ class TestResults {
     stopTimeStamp(stop: stop);
   }
 
-  /// Update the last added step [stepName] in the test data
-  /// adding passed status by default.
+  /// Updates the given step.
+  /// 
+  /// Updates the latest step with the given name, with the status 'passed' as 
+  /// default and records its start.
   Future<void> updateStep(
     String stepName, {
     String? status,
@@ -107,10 +104,10 @@ class TestResults {
     stopTimeStamp(stop: stop);
   }
 
-  /// Upload the report to Google Cloud Storage
-  Future<void> uploadReportToGoogleCloudStorage(String testUDID) async {
+  /// Uploads the report to Google Cloud Storage.
+  Future<void> uploadReportToGoogleCloudStorage(String testUUID) async {
     final destinationPath =
-        '${GoogleCloudPaths().destinationPath}/$testUDID-result.json';
+        '${GoogleCloudPaths().destinationPath}/$testUUID-result.json';
     await uploadStringToCloudStorage(
       content: jsonEncode(_report),
       bucketName: GoogleCloudPaths().bucketName,
@@ -118,9 +115,9 @@ class TestResults {
     );
   }
 
-  ///Generates an unique ID for the Allure report
+  ///Generates an unique ID for the Allure report.
   String generateAllureReportId() {
     const uuid = Uuid();
-    return uuid.v4(); // Generates a unique ID
+    return uuid.v4();
   }
 }
