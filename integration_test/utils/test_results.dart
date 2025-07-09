@@ -7,28 +7,29 @@ import 'google_cloud_service.dart';
 
 /// {@template test_results}
 /// A utility class for recording and reporting test results in integration
-/// tests.
-///
-/// [TestResults] provides functionality to:
-/// - Record test steps with timestamps and status (passed/failed)
-/// - Track the overall test status
-/// - Generate unique identifiers for reports
-/// - Upload test results to Google Cloud Storage for Allure reporting
+/// tests with Allure reporting support.
 /// {@endtemplate}
 ///
-/// Usage example:
+/// Important: Before using this class, make sure you call:
 /// ```dart
-/// final report = TestResults('My Test Name');
+/// IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+/// ```
+///
+/// Basic usage:
+/// ```dart
+/// // Initialize test reporting
+/// final report = TestResults('Test Name');
 /// final testUUID = report.generateAllureReportId();
-///
-/// await report.addStep('Load widget', () async {
-///   await tester.pumpWidget(MyWidget());
+/// 
+/// // Record test steps
+/// await report.addStep('Step description', () async {
+///   // Test code here
 /// });
-///
-/// // Mark the test as passed if all steps succeed
+/// 
+/// // Mark test as passed if all steps succeed
 /// report.passTest();
-///
-/// // Upload the results in tearDown
+/// 
+/// // Upload results in tearDown
 /// await report.uploadReportToGoogleCloudStorage(testUUID);
 /// ```
 class TestResults {
