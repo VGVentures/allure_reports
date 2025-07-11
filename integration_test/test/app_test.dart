@@ -46,7 +46,7 @@ void main() {
       report.passTest();
     });
 
-    tearDownAll(() async {
+    tearDown(() async {
       await report.uploadReportToGoogleCloudStorage(testUUID);
     });
   });

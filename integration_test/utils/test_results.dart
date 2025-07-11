@@ -10,11 +10,6 @@ import 'google_cloud_service.dart';
 /// tests with Allure reporting support.
 /// {@endtemplate}
 ///
-/// Important: Before using this class, make sure you call:
-/// ```dart
-/// IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-/// ```
-///
 /// Basic usage:
 /// ```dart
 /// // Initialize test reporting
