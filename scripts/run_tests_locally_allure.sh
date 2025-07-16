@@ -11,7 +11,7 @@ rm -rf $RESULTS_PATH/$GCLOUD_RESULTS_DIR
 
 gcloud storage rm --recursive gs://$RESULTS_BUCKET/$GCLOUD_RESULTS_DIR/
 
-flutter test ../integration_test/app_test.dart
+flutter test ../integration_test/test/app_test.dart
 
 set -e
 
