@@ -2,6 +2,9 @@
 
 This project showcases how to integrate **Allure Reports** into Flutter integration tests — making it simple to generate structured, visually rich test reports that help developers, QA and stakeholders understand test outcomes at a glance.
 
+Read our blog [Elevating Flutter Test Reports with Allure](https://www.verygood.ventures/blog/elevating-flutter-test-reports-with-allure)
+
+
 ---
 
 ## 📁 Project Structure
